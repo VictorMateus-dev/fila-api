@@ -26,7 +26,7 @@ public class Fila {
 
     @ManyToOne
     @JoinColumn(name = "exame_id")
-    private exame exame;
+    private Exame exame;
 
     @ManyToOne
     @JoinColumn(name = "prioridade_id")
