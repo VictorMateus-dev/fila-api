@@ -21,14 +21,14 @@ public class Fila {
     private String observacao;
 
     @ManyToOne
-    @JoinColumn(name = "cpf_paciente")
+    @JoinColumn(name = "cpf_paciente", nullable = false)
     private Paciente paciente;
 
     @ManyToOne
-    @JoinColumn(name = "exame_id")
+    @JoinColumn(name = "exame_id", nullable = false)
     private Exame exame;
 
     @ManyToOne
-    @JoinColumn(name = "prioridade_id")
+    @JoinColumn(name = "prioridade_id",nullable = false)
     private Prioridade prioridade;
 }
