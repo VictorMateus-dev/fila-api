@@ -1,6 +1,7 @@
 package br.com.sus.fila_api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -13,8 +14,12 @@ public class Exame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String nome;
+    @NotBlank
     private String descricao;
+    @NotBlank
     private String preparo;
+    @NotBlank
     private Integer tempoEstimado;
 }

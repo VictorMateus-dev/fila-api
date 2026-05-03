@@ -1,6 +1,7 @@
 package br.com.sus.fila_api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -13,7 +14,10 @@ public class Usuario {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
+    @NotBlank
     private String role;
 }
