@@ -14,6 +14,15 @@ public class ExameService {
     public ExameService(ExameRepository exameRepository){
         this.exameRepository = exameRepository;
     }
+    public List<Exame> listar(){
+        return exameRepository.findAll();
+    }
+    public Optional<Exame> buscarPorId(Long id){
+        return exameRepository.findById(id);
+    }
+    public Exame adicionarExame(Exame exame){
+        return exameRepository.save(exame);
+    }
 
     public List<Exame> listar(){
         return exameRepository.findAll();
