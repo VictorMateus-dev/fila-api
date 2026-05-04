@@ -4,6 +4,7 @@ import br.com.sus.fila_api.Repository.FilaRepository;
 import br.com.sus.fila_api.Service.FilaService;
 import br.com.sus.fila_api.model.Fila;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/fila")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class FilaController {
 
     public final FilaService filaService;
@@ -33,11 +35,13 @@ public class FilaController {
         return filaService.listarPorExame(id);
     }
 
-    @PutMapping("/{id}/status")
-    public Fila atualizarStatus(@PathVariable Long id,
-                                @RequestParam String status) {
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> atualizarStatus(
+            @PathVariable Long id,
+            @RequestBody String novoStatus) {
 
-        return filaService.atualizarStatus(id, status);
+        filaService.atualizarStatus(id, novoStatus);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/posicao")

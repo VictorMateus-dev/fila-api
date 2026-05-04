@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/pacientes")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class PacienteController {
 
     public final PacienteService pacienteService;
@@ -19,16 +20,24 @@ public class PacienteController {
     public Paciente paciente(@RequestBody Paciente paciente){
         return pacienteService.salvarPaciente(paciente);
     }
+
     @GetMapping
     public List<Paciente> listar(){
         return pacienteService.listarPacientes();
     }
+
     @GetMapping("/{cpf}")
     public ResponseEntity<Paciente> buscarPorCpf(@PathVariable String cpf){
         return pacienteService.buscarPorCpf(cpf)
                 .map(ResponseEntity :: ok)
                 .orElse(ResponseEntity.notFound().build());
 
+    }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<Void> deletar(@PathVariable String cpf) {
+        pacienteService.deletarPaciente(cpf);
+        return ResponseEntity.noContent().build();
     }
 
 }

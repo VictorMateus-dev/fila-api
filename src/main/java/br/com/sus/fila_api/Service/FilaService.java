@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,21 @@ public class FilaService {
     public final PacienteRepository pacienteRepository;
     public final ExameRepository exameRepository;
     public final PrioridadeRepository prioridadeRepository;
+
+    public Fila atualizarStatus(Long id, String novoStatus) {
+        Optional<Fila> filaOpt = filaRepository.findById(id);
+
+        if (filaOpt.isPresent()) {
+            Fila fila = filaOpt.get();
+            fila.setStatus(novoStatus.toUpperCase());
+            fila.setDataAtualizacao(LocalDateTime.now());
+
+            return filaRepository.save(fila);
+        } else {
+            throw new RuntimeException("Fila não encontrada com id: " + id); // bem básico
+        }
+
+    }
 
     public Fila adicionarNaFila(String cpf,Long exame_id,Long prioridade_id){
         Paciente paciente = pacienteRepository.findById(cpf)
@@ -47,23 +63,10 @@ public class FilaService {
     public List<Fila> listarPorExame(Long exameId) {
 
         return filaRepository
-                .findByExameIdOrderByPrioridadeNivelDescDataSolicitacaoAsc(exameId);
+                .findByExameIdOrderByDataSolicitacaoAsc(exameId);
     }
 
-    public Fila atualizarStatus(Long filaId, String status) {
 
-        Fila fila = filaRepository.findById(filaId)
-                .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
-
-        fila.setStatus(status);
-        fila.setDataAtualizacao(LocalDateTime.now());
-
-        if (status.equals("AGENDADO")) {
-            fila.setDataAgendamento(LocalDateTime.now());
-        }
-
-        return filaRepository.save(fila);
-    }
 
     public int calcularPosicao(Long filaId) {
 
@@ -71,7 +74,7 @@ public class FilaService {
                 .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
 
         List<Fila> lista = filaRepository
-                .findByExameIdOrderByPrioridadeNivelDescDataSolicitacaoAsc(
+                .findByExameIdOrderByDataSolicitacaoAsc(
                         fila.getExame().getId()
                 );
 

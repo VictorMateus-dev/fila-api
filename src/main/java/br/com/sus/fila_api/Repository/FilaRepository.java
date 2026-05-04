@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FilaRepository extends JpaRepository<Fila,Long> {
-    List<Fila> findByExameIdOrderByPrioridadeNivelDescDataSolicitacaoAsc(Long exameId);
+    List<Fila> findByExameIdOrderByDataSolicitacaoAsc(Long exameId);
 }

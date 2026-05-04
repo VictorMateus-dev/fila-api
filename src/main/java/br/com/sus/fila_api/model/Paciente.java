@@ -20,12 +20,12 @@ public class Paciente {
     @NotBlank
     private String nome;
     @NotNull
-    private LocalDate dataNacimento;
+    private LocalDate dataNascimento;
     @NotBlank
     private String telefone;
 
     private String email;
     @NotBlank
-    private String endereço;
+    private String endereco;
 
 }

@@ -28,4 +28,7 @@ public class PacienteService {
         return pacienteRepository.save(paciente);
     }
 
+    public void deletarPaciente(String cpf) {
+        pacienteRepository.deleteById(cpf);
+    }
 }

@@ -12,14 +12,14 @@ public class UsuarioService {
     public final UsuarioRepository usuarioRepository;
 
     public Usuario salvarUsuario(Usuario usuario) {
-        if (usuarioRepository.findByUserName(usuario.getUsername()).isPresent()) {
+        if (usuarioRepository.findByUsername(usuario.getUsername()).isPresent()) {
             throw new RuntimeException("Username já existe");
         }
         return usuarioRepository.save(usuario);
     }
 
     public Usuario login(String username, String senha) {
-        Usuario usuario = usuarioRepository.findByUserName(username)
+        Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         if (!usuario.getPassword().equals(senha)) {
             throw new RuntimeException("Senha inválida");

@@ -13,6 +13,6 @@ public class Prioridade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String descricao;
+    private String nome;
     private Integer nivel;
 }
