@@ -43,12 +43,12 @@ public class FilaService {
 
         return filaRepository.save(fila);
     }
+
     public List<Fila> listarPorExame(Long exameId) {
 
         return filaRepository
                 .findByExameIdOrderByPrioridadeNivelDescDataSolicitacaoAsc(exameId);
     }
-
 
     public Fila atualizarStatus(Long filaId, String status) {
 

@@ -1,0 +1,32 @@
+package br.com.sus.fila_api.Controller;
+
+import br.com.sus.fila_api.Service.ExameService;
+import br.com.sus.fila_api.model.Exame;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/exames")
+@RequiredArgsConstructor
+public class ExameController {
+
+    public final ExameService exameService;
+
+    @PostMapping
+    public Exame salvar(@RequestBody Exame exame){
+        return exameService.adicionarExame(exame);
+    }
+    @GetMapping
+    public List<Exame> listar(){
+        return exameService.listar();
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Exame> buscarPorId(@PathVariable Long id){
+        return exameService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

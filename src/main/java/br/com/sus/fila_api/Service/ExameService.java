@@ -24,16 +24,5 @@ public class ExameService {
         return exameRepository.save(exame);
     }
 
-    public List<Exame> listar(){
-        return exameRepository.findAll();
-    }
-
-    public Optional<Exame> buscarPorId(Long id){
-        return exameRepository.findById(id);
-    }
-
-    public Exame adicionarExame(Exame exame){
-        return exameRepository.save(exame);
-    }
 
 }
