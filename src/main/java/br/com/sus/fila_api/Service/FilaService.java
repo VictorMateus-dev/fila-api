@@ -8,6 +8,7 @@ import br.com.sus.fila_api.model.Exame;
 import br.com.sus.fila_api.model.Fila;
 import br.com.sus.fila_api.model.Paciente;
 import br.com.sus.fila_api.model.Prioridade;
+import jakarta.transaction.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,20 +24,32 @@ public class FilaService {
     public final PacienteRepository pacienteRepository;
     public final ExameRepository exameRepository;
     public final PrioridadeRepository prioridadeRepository;
+    public final WhatsAppService whatsAppService;
 
     public Fila atualizarStatus(Long id, String novoStatus) {
-        Optional<Fila> filaOpt = filaRepository.findById(id);
 
-        if (filaOpt.isPresent()) {
-            Fila fila = filaOpt.get();
-            fila.setStatus(novoStatus.toUpperCase());
-            fila.setDataAtualizacao(LocalDateTime.now());
+        Fila fila = filaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Fila não encontrada com id: " + id));
 
-            return filaRepository.save(fila);
-        } else {
-            throw new RuntimeException("Fila não encontrada com id: " + id); // bem básico
+        String statusFormatado = novoStatus.toUpperCase();
+
+        fila.setStatus(statusFormatado);
+        fila.setDataAtualizacao(LocalDateTime.now());
+
+        Fila filaSalva = filaRepository.save(fila);
+
+
+        if (statusFormatado.equals("AGENDADO")) {
+
+            String telefone = fila.getPaciente().getTelefone();
+
+            String mensagem = "Olá " + fila.getPaciente().getNome() +
+                    ", seu atendimento foi agendado! Esteja presente no Centro de Especialidades.";
+
+            whatsAppService.enviarMensagem(telefone, mensagem);
         }
 
+        return filaSalva;
     }
 
     public Fila adicionarNaFila(String cpf,Long exame_id,Long prioridade_id){
@@ -92,4 +105,6 @@ public class FilaService {
     public void deletarDaFila(Long id) {
         filaRepository.deleteById(id);
     }
+
+
 }
