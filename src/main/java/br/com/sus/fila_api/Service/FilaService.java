@@ -40,8 +40,10 @@ public class FilaService {
 
 
         if (statusFormatado.equals("AGENDADO")) {
+            System.out.println("Entrou no IF AGENDADO");
 
             String telefone = fila.getPaciente().getTelefone();
+            System.out.println("Telefone: " + telefone);
 
             String mensagem = "Olá " + fila.getPaciente().getNome() +
                     ", seu atendimento foi agendado! Esteja presente no Centro de Especialidades.";

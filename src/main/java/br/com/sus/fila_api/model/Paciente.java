@@ -27,5 +27,4 @@ public class Paciente {
     private String email;
     @NotBlank
     private String endereco;
-
 }
