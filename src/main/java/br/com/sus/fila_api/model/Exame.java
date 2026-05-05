@@ -23,4 +23,5 @@ public class Exame {
     private String preparo;
     @NotBlank
     private String tempoEstimado;
+
 }

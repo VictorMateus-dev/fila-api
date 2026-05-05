@@ -5,6 +5,7 @@ import br.com.sus.fila_api.Service.FilaService;
 import br.com.sus.fila_api.model.Fila;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class FilaController {
 
     public final FilaService filaService;
 
+    @Transactional
     @PostMapping
     public Fila adiionar(@RequestParam String cpf,
                          @RequestParam Long exameid,
@@ -38,7 +40,7 @@ public class FilaController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<Void> atualizarStatus(
             @PathVariable Long id,
-            @RequestParam String status) {   // Mudado para @RequestParam
+            @RequestParam String status) {
 
         filaService.atualizarStatus(id, status);
         return ResponseEntity.ok().build();
