@@ -89,4 +89,7 @@ public class FilaService {
     public List<Fila> listarTodos() {
         return filaRepository.findAll();
     }
+    public void deletarDaFila(Long id) {
+        filaRepository.deleteById(id);
+    }
 }

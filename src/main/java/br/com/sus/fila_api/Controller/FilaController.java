@@ -38,10 +38,15 @@ public class FilaController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<Void> atualizarStatus(
             @PathVariable Long id,
-            @RequestBody String novoStatus) {
+            @RequestParam String status) {   // Mudado para @RequestParam
 
-        filaService.atualizarStatus(id, novoStatus);
+        filaService.atualizarStatus(id, status);
         return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarDaFila(@PathVariable Long id) {
+        filaService.deletarDaFila(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/posicao")
@@ -49,3 +54,4 @@ public class FilaController {
         return filaService.calcularPosicao(id);
     }
 }
+

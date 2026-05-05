@@ -24,5 +24,9 @@ public class ExameService {
         return exameRepository.save(exame);
     }
 
+    public void deletarExame(Long id){
+        exameRepository.deleteById(id);
+    }
+
 
 }

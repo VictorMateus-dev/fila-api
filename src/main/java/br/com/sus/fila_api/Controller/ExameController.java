@@ -20,6 +20,7 @@ public class ExameController {
     public Exame salvar(@RequestBody Exame exame){
         return exameService.adicionarExame(exame);
     }
+
     @GetMapping
     public List<Exame> listar(){
         return exameService.listar();
@@ -29,5 +30,10 @@ public class ExameController {
         return exameService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPorId(@PathVariable Long id){
+        exameService.deletarExame(id);
+                return ResponseEntity.noContent().build();
     }
 }
