@@ -8,30 +8,28 @@ import br.com.sus.fila_api.model.Exame;
 import br.com.sus.fila_api.model.Fila;
 import br.com.sus.fila_api.model.Paciente;
 import br.com.sus.fila_api.model.Prioridade;
-import jakarta.transaction.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FilaService {
 
-    public final FilaRepository filaRepository;
-    public final PacienteRepository pacienteRepository;
-    public final ExameRepository exameRepository;
-    public final PrioridadeRepository prioridadeRepository;
-    public final WhatsAppService whatsAppService;
+    private final FilaRepository filaRepository;
+    private final PacienteRepository pacienteRepository;
+    private final ExameRepository exameRepository;
+    private final PrioridadeRepository prioridadeRepository;
+    private final WhatsappService whatsAppService;
 
     public Fila atualizarStatus(Long id, String novoStatus) {
 
         Fila fila = filaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fila não encontrada com id: " + id));
 
-        String statusFormatado = novoStatus.toUpperCase();
+        String statusFormatado = novoStatus.toUpperCase().trim();
 
         fila.setStatus(statusFormatado);
         fila.setDataAtualizacao(LocalDateTime.now());
@@ -39,30 +37,36 @@ public class FilaService {
         Fila filaSalva = filaRepository.save(fila);
 
 
-        if (statusFormatado.equals("AGENDADO")) {
-            System.out.println("Entrou no IF AGENDADO");
+        if ("AGENDADO".equals(statusFormatado)) {
+            try {
+                String telefone = fila.getPaciente().getTelefone();
+                String nomePaciente = fila.getPaciente().getNome();
 
-            String telefone = fila.getPaciente().getTelefone();
-            System.out.println("Telefone: " + telefone);
+                String mensagem = "Olá " + nomePaciente + " 👋\n\n" +
+                        "Seu atendimento foi **agendado** com sucesso!\n\n" +
+                        "📍 Esteja presente no Centro de Especialidades, no dia 20/05/2026";
 
-            String mensagem = "Olá " + fila.getPaciente().getNome() +
-                    ", seu atendimento foi agendado! Esteja presente no Centro de Especialidades.";
+                System.out.println("📲 Enviando WhatsApp para: " + telefone);
+                whatsAppService.enviarMensagem(telefone, mensagem);
 
-            whatsAppService.enviarMensagem(telefone, mensagem);
+            } catch (Exception e) {
+                System.err.println("⚠️ Erro ao enviar mensagem WhatsApp: " + e.getMessage());
+
+            }
         }
 
         return filaSalva;
     }
 
-    public Fila adicionarNaFila(String cpf,Long exame_id,Long prioridade_id){
+    public Fila adicionarNaFila(String cpf, Long exame_id, Long prioridade_id) {
         Paciente paciente = pacienteRepository.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado com CPF: " + cpf));
 
         Exame exame = exameRepository.findById(exame_id)
-                .orElseThrow(()-> new RuntimeException("Exame não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Exame não encontrado"));
 
         Prioridade prioridade = prioridadeRepository.findById(prioridade_id)
-                .orElseThrow(()-> new RuntimeException("Prioridade não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Prioridade não encontrada"));
 
         Fila fila = new Fila();
         fila.setPaciente(paciente);
@@ -76,22 +80,15 @@ public class FilaService {
     }
 
     public List<Fila> listarPorExame(Long exameId) {
-
-        return filaRepository
-                .findByExameIdOrderByDataSolicitacaoAsc(exameId);
+        return filaRepository.findByExameIdOrderByDataSolicitacaoAsc(exameId);
     }
 
-
-
     public int calcularPosicao(Long filaId) {
-
         Fila fila = filaRepository.findById(filaId)
                 .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
 
         List<Fila> lista = filaRepository
-                .findByExameIdOrderByDataSolicitacaoAsc(
-                        fila.getExame().getId()
-                );
+                .findByExameIdOrderByDataSolicitacaoAsc(fila.getExame().getId());
 
         return lista.indexOf(fila) + 1;
     }
@@ -104,9 +101,8 @@ public class FilaService {
     public List<Fila> listarTodos() {
         return filaRepository.findAll();
     }
+
     public void deletarDaFila(Long id) {
         filaRepository.deleteById(id);
     }
-
-
 }

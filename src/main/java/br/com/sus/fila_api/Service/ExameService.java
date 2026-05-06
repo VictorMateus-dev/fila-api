@@ -30,8 +30,8 @@ public class ExameService {
     }
 
     public void deletarExame(Long id){
-        filaRepository.deleteByExameId(id); // remove dependentes
-        exameRepository.deleteById(id);     // agora pode deletar
+        filaRepository.deleteByExameId(id);
+        exameRepository.deleteById(id);
     }
 
 

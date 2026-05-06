@@ -16,7 +16,7 @@ public class FilaController {
 
     private final FilaService filaService;
 
-    // Criar entrada na fila
+
     @PostMapping
     public ResponseEntity<Fila> adicionar(
             @RequestParam String cpf,
@@ -27,19 +27,16 @@ public class FilaController {
         return ResponseEntity.ok(fila);
     }
 
-    // Listar todas
     @GetMapping
     public ResponseEntity<List<Fila>> listarFila() {
         return ResponseEntity.ok(filaService.listarTodos());
     }
 
-    // Listar por exame
     @GetMapping("/exame/{id}")
     public ResponseEntity<List<Fila>> listarPorExame(@PathVariable Long id) {
         return ResponseEntity.ok(filaService.listarPorExame(id));
     }
 
-    // 🔥 Atualizar status (corrigido)
     @PutMapping("/{id}/status")
     public ResponseEntity<Fila> atualizarStatus(
             @PathVariable Long id,
@@ -49,14 +46,13 @@ public class FilaController {
         return ResponseEntity.ok(filaAtualizada);
     }
 
-    // Deletar
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarDaFila(@PathVariable Long id) {
         filaService.deletarDaFila(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Posição na fila
     @GetMapping("/{id}/posicao")
     public ResponseEntity<Integer> posicao(@PathVariable Long id) {
         return ResponseEntity.ok(filaService.calcularPosicao(id));
