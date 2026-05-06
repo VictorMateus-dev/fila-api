@@ -27,4 +27,8 @@ public class Paciente {
     private String email;
     @NotBlank
     private String endereco;
+
+    @ManyToOne
+    @JoinColumn(name = "prioridade_id")
+    private Prioridade prioridade;
 }

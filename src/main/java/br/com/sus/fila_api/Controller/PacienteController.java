@@ -1,3 +1,4 @@
+// PacienteController.java
 package br.com.sus.fila_api.Controller;
 
 import br.com.sus.fila_api.Service.PacienteService;
@@ -14,24 +15,24 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class PacienteController {
 
-    public final PacienteService pacienteService;
+    private final PacienteService pacienteService;
 
     @PostMapping
-    public Paciente paciente(@RequestBody Paciente paciente){
-        return pacienteService.salvarPaciente(paciente);
+    public ResponseEntity<Paciente> cadastrar(@RequestBody Paciente paciente) {
+        Paciente salvo = pacienteService.salvarPaciente(paciente);
+        return ResponseEntity.status(201).body(salvo);   // 201 Created
     }
 
     @GetMapping
-    public List<Paciente> listar(){
+    public List<Paciente> listar() {
         return pacienteService.listarPacientes();
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<Paciente> buscarPorCpf(@PathVariable String cpf){
+    public ResponseEntity<Paciente> buscarPorCpf(@PathVariable String cpf) {
         return pacienteService.buscarPorCpf(cpf)
-                .map(ResponseEntity :: ok)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-
     }
 
     @DeleteMapping("/{cpf}")
@@ -39,5 +40,4 @@ public class PacienteController {
         pacienteService.deletarPaciente(cpf);
         return ResponseEntity.noContent().build();
     }
-
 }
