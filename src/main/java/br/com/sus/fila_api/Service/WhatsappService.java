@@ -43,13 +43,13 @@ public class WhatsappService {
             ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                System.out.println("✅ WhatsApp enviado com sucesso!");
+                System.out.println(" WhatsApp enviado com sucesso!");
             } else {
-                System.err.println("❌ Erro Z-API: " + response.getBody());
+                System.err.println(" Erro Z-API: " + response.getBody());
             }
 
         } catch (Exception e) {
-            System.err.println("⚠️ Erro ao enviar mensagem WhatsApp: " + e.getMessage());
+            System.err.println(" Erro ao enviar mensagem WhatsApp: " + e.getMessage());
             e.printStackTrace();
         }
     }
